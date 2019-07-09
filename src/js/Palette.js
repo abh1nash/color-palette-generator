@@ -21,6 +21,10 @@ class Palette {
         this.colors = this.triad();
         break;
       }
+      case "compound": {
+        this.colors = this.compound();
+        break;
+      }
       default: {
         this.colors = this.complement();
       }
@@ -62,17 +66,20 @@ class Palette {
     return colors;
   }
 
-  analogous() {
+  analogous(color) {
     let colors = [];
+    let temp = color || this.primaryColor;
     let variations = 3;
     for (let i = -30; i <= 30; i += 90 / variations) {
-      colors.push([
-        ((this.primaryColor[0] * 360 + i) % 360) / 360,
-        this.primaryColor[1],
-        this.primaryColor[2]
-      ]);
+      colors.push([((temp[0] * 360 + i) % 360) / 360, temp[1], temp[2]]);
     }
     return colors;
+  }
+
+  compound() {
+    let contrast = this.complement()[1];
+    let analogOfContrast = this.analogous(contrast);
+    return [analogOfContrast[0], this.primaryColor, analogOfContrast[2]];
   }
 
   show() {
