@@ -1,14 +1,31 @@
 import { rgbToHsl, hslToRgb } from "./hsl-rgb";
+import { defaultCipherList } from "constants";
 
 class Palette {
-  constructor(target, size, primaryColor) {
+  constructor(target, size, primaryColor, harmony) {
     this.primaryColor = rgbToHsl(
       primaryColor[0],
       primaryColor[1],
       primaryColor[2]
     );
-    this.colors = this.triad();
-    console.log(this.colors);
+    switch (harmony) {
+      case "analogous": {
+        this.colors = this.analogous();
+        break;
+      }
+      case "complement": {
+        this.colors = this.complement();
+        break;
+      }
+      case "triad": {
+        this.colors = this.triad();
+        break;
+      }
+      default: {
+        this.colors = this.complement();
+      }
+    }
+
     this.size = size;
     this.ctx;
     this.setup(target);
@@ -25,9 +42,11 @@ class Palette {
   complement() {
     return [
       this.primaryColor,
-      ((this.primaryColor[0] * 360 + 180) % 360) / 360,
-      this.primaryColor[1],
-      1 - this.primaryColor[2]
+      [
+        ((this.primaryColor[0] * 360 + 180) % 360) / 360,
+        this.primaryColor[1],
+        1 - this.primaryColor[2]
+      ]
     ];
   }
 
@@ -43,7 +62,22 @@ class Palette {
     return colors;
   }
 
+  analogous() {
+    let colors = [];
+    let variations = 3;
+    for (let i = -30; i <= 30; i += 90 / variations) {
+      colors.push([
+        ((this.primaryColor[0] * 360 + i) % 360) / 360,
+        this.primaryColor[1],
+        this.primaryColor[2]
+      ]);
+    }
+    return colors;
+  }
+
   show() {
+    this.ctx.clearRect(0, 0, this.size, this.size);
+
     let start = -Math.PI / 2;
     let arcSize = (2 * Math.PI) / this.colors.length;
 
@@ -64,7 +98,7 @@ class Palette {
       this.ctx.lineTo(this.size / 2, this.size / 2);
       this.ctx.closePath();
 
-      this.ctx.lineWidth = this.size / 15;
+      this.ctx.lineWidth = this.size / 20;
       this.ctx.stroke();
       this.ctx.fill();
 
@@ -79,6 +113,4 @@ class Palette {
   }
 }
 
-let j = new Palette("canvas", 300, [222, 82, 70]);
-
-j.show();
+export default Palette;

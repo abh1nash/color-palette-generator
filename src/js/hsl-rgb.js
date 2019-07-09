@@ -167,4 +167,4 @@ function hsvToRgb(h, s, v) {
   return [r * 255, g * 255, b * 255];
 }
 
-module.exports = { rgbToHsl, rgbToHsv, hslToRgb, hsvToRgb };
+export { rgbToHsl, rgbToHsv, hslToRgb, hsvToRgb };
