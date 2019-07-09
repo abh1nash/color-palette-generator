@@ -1,0 +1,29 @@
+{
+  "name": "color-palette-generator",
+  "version": "1.0.0",
+  "description": "Generates different harmonies for different colors",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abh1nash/color-palette-generator.git"
+  },
+  "keywords": [
+    "color",
+    "harmony",
+    "generator",
+    "palette",
+    "analog",
+    "monochrome",
+    "triad",
+    "compound"
+  ],
+  "author": "Abhinash Khatiwada",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/abh1nash/color-palette-generator/issues"
+  },
+  "homepage": "https://github.com/abh1nash/color-palette-generator#readme"
+}
