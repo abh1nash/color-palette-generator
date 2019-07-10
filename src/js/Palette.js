@@ -68,7 +68,7 @@ class Palette {
     let colors = [];
     for (let i = 0; i < 3; i++) {
       colors.push([
-        ((this.primaryColor[0] * 360 + i * 60) % 360) / 360,
+        ((this.primaryColor[0] * 360 + i * 120) % 360) / 360,
         this.primaryColor[1],
         this.primaryColor[2]
       ]);
