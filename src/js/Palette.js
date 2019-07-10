@@ -1,32 +1,35 @@
-import { rgbToHsl, hslToRgb } from "./hsl-rgb";
+import { rgbToHsl, hslToRgb, rgbToHsv, hsvToRgb } from "./hsl-rgb";
 import { defaultCipherList } from "constants";
 
 class Palette {
-  constructor(target, size, primaryColor, harmony) {
+  constructor(target, size, primaryColor, harmony, variations) {
+    this.variations = variations;
     this.primaryColor = rgbToHsl(
       primaryColor[0],
       primaryColor[1],
       primaryColor[2]
     );
+
     switch (harmony) {
       case "analogous": {
-        this.colors = this.analogous();
+        this.colors = this.shades(this.analogous());
+
         break;
       }
       case "complement": {
-        this.colors = this.complement();
+        this.colors = this.shades(this.complement());
         break;
       }
       case "triad": {
-        this.colors = this.triad();
+        this.colors = this.shades(this.triad());
         break;
       }
       case "compound": {
-        this.colors = this.compound();
+        this.colors = this.shades(this.compound());
         break;
       }
       default: {
-        this.colors = this.complement();
+        this.colors = this.shades(this.complement());
       }
     }
 
@@ -80,6 +83,40 @@ class Palette {
     let contrast = this.complement()[1];
     let analogOfContrast = this.analogous(contrast);
     return [analogOfContrast[0], this.primaryColor, analogOfContrast[2]];
+  }
+
+  shades(colors) {
+    let shades = [];
+    let shadesCount = Math.floor(this.variations / colors.length);
+    shades.push(...colors);
+    colors.forEach(color => {
+      let temp = hslToRgb(color[0], color[1], color[2]);
+      let hsv = rgbToHsv(temp[0], temp[1], temp[2]);
+
+      let h = hsv[0],
+        s = hsv[1],
+        v = hsv[2];
+      for (let i = 0; i < shadesCount; i++) {
+        if (shades.length < this.variations) {
+          v += colors.length / this.variations;
+
+          v > 0.95 ? (v -= 1) : v;
+          v < 0 ? (v += 1) : v;
+          // console.log(v);
+          let temp2 = hsvToRgb(h, s, v);
+          let hsl = rgbToHsl(temp2[0], temp2[1], temp2[2]);
+
+          shades.push(hsl);
+        }
+      }
+    });
+    shades.sort(function(a, b) {
+      return a[2] - b[2];
+    });
+    shades.sort(function(a, b) {
+      return a[0] - b[0];
+    });
+    return shades;
   }
 
   show() {
