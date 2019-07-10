@@ -49,9 +49,9 @@ function createPalette(title, parent, color, harmony, variations) {
     color.forEach((value, index) => {
       let item = document.createElement("div");
       if (index == 0) {
-        item.textContent = `${Math.round(value) * 360}°`;
+        item.textContent = `${Math.round(value * 360)}°`;
       } else {
-        item.textContent = `${Math.round(value) * 100}%`;
+        item.textContent = `${Math.round(value * 100)}%`;
       }
       hslValue.appendChild(item);
     });
@@ -82,8 +82,10 @@ function decimalToHexString(number) {
 
   let char = number.toString(16).toUpperCase();
 
-  if (char.length == 1) {
+  if (char.length == 1 && parseInt(char, 16) > 15) {
     char += char;
+  } else if (char.length == 1 && parseInt(char, 16) <= 15) {
+    char = "0" + char;
   }
 
   return char;
