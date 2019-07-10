@@ -1,37 +1,36 @@
 import "./scss/main.scss";
-import Palette from "./js/Palette";
-
-let canvas = document.querySelectorAll("canvas");
+import createPalette from "./js/palette-display";
 
 let input = document.querySelector("#color-selector");
 let select = document.querySelector("#variations");
+let parent = document.querySelector(".color-palettes");
+let titles = ["Complementary", "Analogous", "Triad", "Compound", "Monochrome"];
+let modes = ["complement", "analogous", "triad", "compound", "mono"];
+
+genPalette(titles, modes, parseRgb(input.value), select.value);
 
 select.addEventListener("change", () => {
+  while (parent.firstChild) {
+    parent.removeChild(parent.firstChild);
+  }
   let rgb = parseRgb(input.value);
-  canvas.forEach(el => {
-    let palette = new Palette(`#${el.id}`, 150, rgb, el.id, select.value);
-    palette.show();
-  });
+  genPalette(titles, modes, rgb, select.value);
 });
 
 input.addEventListener("change", () => {
+  while (parent.firstChild) {
+    parent.removeChild(parent.firstChild);
+  }
   let rgb = parseRgb(input.value);
-  canvas.forEach(el => {
-    let palette = new Palette(`#${el.id}`, 150, rgb, el.id, select.value);
-    palette.show();
-  });
+
+  genPalette(titles, modes, rgb, select.value);
 });
 
-canvas.forEach(el => {
-  let palette = new Palette(
-    `#${el.id}`,
-    150,
-    [252, 233, 3],
-    el.id,
-    select.value
-  );
-  palette.show();
-});
+function genPalette(titles, modes, primaryColor, variations) {
+  titles.forEach((title, index) => {
+    createPalette(title, parent, primaryColor, modes[index], variations);
+  });
+}
 
 function parseRgb(input) {
   let colorCode = input;

@@ -39,7 +39,14 @@ class Palette {
   }
 
   setup(target) {
-    let canvas = document.querySelector(target);
+    let canvas;
+
+    if (target.nodeType) {
+      canvas = target;
+    } else {
+      canvas = document.querySelector(target);
+    }
+
     this.ctx = canvas.getContext("2d");
 
     canvas.height = this.size;
