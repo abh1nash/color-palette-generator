@@ -29,7 +29,7 @@ class Palette {
         break;
       }
       default: {
-        this.colors = this.shades(this.complement());
+        this.colors = this.shades([this.primaryColor]);
       }
     }
 
