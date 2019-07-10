@@ -181,5 +181,8 @@ footer {
     text-decoration: none;
     color: purple;
     margin-left: 0.4em;
+    &:hover {
+      border-bottom: 1px solid blue;
+    }
   }
 }
